@@ -1,4 +1,4 @@
-:root{--pad:clamp(18px,5.5vw,112px);--fg:#0d0e12;--bg:#fff;--muted:#6b6f76;--brand:#555eff;--border:rgba(0,0,0,.1);--shadow:0 20px 60px rgba(0,0,0,.08)}
+:root{--pad:clamp(18px,5.5vw,112px);--fg:#0d0e12;--bg:#fff;--muted:#6b6f76;--brand:#555eff;--border:rgba(0,0,0,.1);--shadow:0 20px 60px rgba(0,0,0,.08);--eye-sway-range:8px;--eye-sway-speed:4.8s}
 *{box-sizing:border-box}html,body{margin:0;padding:0}
 body{font-family:'Pretendard Variable',Pretendard,ui-sans-serif,system-ui,'Noto Sans KR',Arial;color:var(--fg);background:var(--bg);line-height:1.65;word-break:keep-all}
 .logo-font{font-family:'Vonique 92','Pretendard Variable',sans-serif;letter-spacing:.15px}
@@ -21,7 +21,7 @@ body{font-family:'Pretendard Variable',Pretendard,ui-sans-serif,system-ui,'Noto 
 /* header */
 .site-header{position:fixed;inset:0 0 auto 0;z-index:240} 
 .nav{display:flex;align-items:center;justify-content:space-between;padding-block:14px}
-.brand{display:block;width:92px;height:26px;background:url('images/logo.svg') center/contain no-repeat}
+.brand{display:block;width:92px;height:26px;background:url('../images/logo.svg') center/contain no-repeat}
 body.nav-open .brand{opacity:0;pointer-events:none;transition:opacity .35s}
 
 /* burger */
@@ -52,10 +52,13 @@ body.nav-open .burger span{background:#fff}
 .hero.sticky{position:sticky;top:0;height:100vh;overflow:hidden}
 .logo-big{position:absolute;bottom:clamp(24px,5vh,60px);left:50%;transform:translateX(-50%);width:min(1600px,84vw);height:auto;display:block}
 .eyes{position:absolute;left:0;top:0;width:86px;height:38px;display:flex;justify-content:space-between;align-items:center;pointer-events:none;will-change:transform}
-.eye{width:22px;height:22px;border-radius:50%;background:var(--brand);box-shadow:0 6px 16px rgba(85,94,255,.35),inset 0 -2px 6px rgba(0,0,0,.15);animation:eye-sway 4.8s ease-in-out infinite}
+.eye{width:22px;height:22px;border-radius:50%;background:var(--brand);box-shadow:0 6px 16px rgba(85,94,255,.35),inset 0 -2px 6px rgba(0,0,0,.15);animation:eye-sway var(--eye-sway-speed) ease-in-out infinite}
 .eye:last-child{animation-delay:.3s}
-@keyframes eye-sway{0%{transform:translateX(-8px)}50%{transform:translateX(8px)}100%{transform:translateX(-8px)}}
-.hero-wrap::after{content:'';position:absolute;inset:auto 0 0 0;height:36vh;background:linear-gradient(180deg,transparent,#fff 40%);pointer-events:none;z-index:1}
+@keyframes eye-sway{
+  0%   { transform: translateX(calc(var(--eye-sway-range) * -1)); }
+  50%  { transform: translateX(var(--eye-sway-range)); }
+  100% { transform: translateX(calc(var(--eye-sway-range) * -1)); }
+}.hero-wrap::after{content:'';position:absolute;inset:auto 0 0 0;height:36vh;background:linear-gradient(180deg,transparent,#fff 40%);pointer-events:none;z-index:1}
 
 /* sections */
 .panel{min-height:68vh;display:flex;align-items:center;padding-block:5vh;border-top:1px solid transparent}

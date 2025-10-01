@@ -31,8 +31,34 @@ function onScroll(){if(!heroWrap||!logoBig)return;const r=heroWrap.getBoundingCl
 window.addEventListener('scroll', onScroll, {passive:true});window.addEventListener('resize', onScroll);
 function positionEyesByIndex(){if(!logoBig||!eyes||!hero)return;const lettersStr=(logoBig.dataset.letters||'revery');const N=Math.max(1,lettersStr.length);const idx=Math.max(0,Math.min(N-1,parseInt(logoBig.dataset.eyeIndex??(N-1),10)||0));const xbias=parseFloat(logoBig.dataset.eyeXbias||'0');const yPct=parseFloat(logoBig.dataset.eyeY||'0.35');const rect=logoBig.getBoundingClientRect();const hrect=hero.getBoundingClientRect();const slot=rect.width/N;const anchorX=(rect.left-hrect.left)+idx*slot+slot*(0.5+xbias);const anchorY=(rect.top-hrect.top)+rect.height*yPct;const ew=eyes.offsetWidth||86;const eh=eyes.offsetHeight||38;eyes.style.transform=`translate(${anchorX-ew/2}px, ${anchorY-eh/2}px)`;}
 window.addEventListener('load', ()=>{positionEyesByIndex();onScroll();});
-window.addEventListener('mousemove', (e)=>{if(!eyes)return;const cx=window.innerWidth/2, cy=window.innerHeight/2;const dx=(e.clientX-cx)/window.innerWidth; const dy=(e.clientY-cy)/window.innerHeight;const px=dx*5.5, py=dy*1.8;document.querySelectorAll('.eye').forEach((eye,i)=>{eye.style.transform=`translate(${px+(i?2:-2)}px, ${py}px)`;});});
+// === Eyes follow: 범위/속도 조절 ===
+const FOLLOW_X = 5.5;   // 가로 이동 범위
+const FOLLOW_Y = 1.8;   // 세로 이동 범위
+const EASE     = 0.12;  // 0~1 (작을수록 느리게/부드럽게)
 
+let tx = 0, ty = 0;     // 목표
+let ex = 0, ey = 0;     // 현재(보간)
+
+window.addEventListener('mousemove', (e)=>{
+  if(!eyes) return;
+  const cx = window.innerWidth/2, cy = window.innerHeight/2;
+  const dx = (e.clientX - cx) / window.innerWidth;
+  const dy = (e.clientY - cy) / window.innerHeight;
+  tx = dx * FOLLOW_X;
+  ty = dy * FOLLOW_Y;
+});
+
+function eyeLoop(){
+  if(eyes){
+    ex += (tx - ex) * EASE;
+    ey += (ty - ey) * EASE;
+    document.querySelectorAll('.eye').forEach((eye,i)=>{
+      eye.style.transform = `translate(${ex + (i?2:-2)}px, ${ey}px)`;
+    });
+  }
+  requestAnimationFrame(eyeLoop);
+}
+eyeLoop();
 // Fullscreen overlay menu
 
 const body=document.body;const burger=document.querySelector('.burger');const overlay=document.getElementById('nav-overlay');
@@ -41,36 +67,35 @@ function closeNav(){if(!overlay)return;overlay.classList.remove('is-open');burge
 burger&&burger.addEventListener('click',()=>{const expanded=burger.getAttribute('aria-expanded')==='true';expanded?closeNav():openNav();});
 window.addEventListener('keydown',(e)=>{if(e.key==='Escape' && overlay && overlay.classList.contains('is-open')) closeNav();});
 
-// --- 메뉴 링크 공통 처리: 홈/서브 모두 동작, 항상 먼저 닫기 ---
+// --- 메뉴 링크 공통 처리: #about/#services 포함 링크 전부 처리 ---
 function basePath(){ return window.location.pathname.split('#')[0]; }
 
 document.querySelectorAll('#nav-overlay a').forEach(a=>{
   a.addEventListener('click',(e)=>{
     const href = a.getAttribute('href') || '';
     const m = href.match(/#([A-Za-z0-9_-]+)/);
-    if(!m){ 
-      // works.html, contact.html 같은 외부/다른 페이지 링크는 기본 동작
+    if(!m){
+      // works.html / contact.html 등 다른 페이지 이동 링크는 기본 동작
       if (typeof closeNav === 'function') closeNav();
       return;
     }
 
-    // #about / #services / #top 등 앵커 대상인 경우
-    const id = m[1];
+    const id = m[1];           // 'about' / 'services' / 'top'
     e.preventDefault();
     if (typeof closeNav === 'function') closeNav();
 
-    // 현재 페이지(홈)에 섹션이 있으면 스크롤
-    const targetEl = (id==='top') ? document.body : document.getElementById(id);
-    if (targetEl){
+    // 현재 페이지(홈)에 섹션이 있으면 부드럽게 스크롤
+    const el = (id==='top') ? document.body : document.getElementById(id);
+    if (el){
       setTimeout(()=>{
         if(id==='top') window.scrollTo({top:0,behavior:'smooth'});
-        else targetEl.scrollIntoView({behavior:'smooth',block:'start'});
+        else el.scrollIntoView({behavior:'smooth',block:'start'});
         history.replaceState(null,'',basePath());
-      },220); // 닫힘 애니 끝난 뒤 스크롤
+      },220); // 닫힘 애니 끝난 후 이동
       return;
     }
 
-    // 서브페이지라 섹션이 없으면 → 홈으로 이동(+프리로더 생략)
+    // 서브 → 홈 섹션으로 (프리로더 생략)
     try { sessionStorage.setItem('skipPreloader','1'); } catch {}
     window.location.href = `index.html#${id}`;
   });
