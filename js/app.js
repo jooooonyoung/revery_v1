@@ -1,6 +1,25 @@
 // Preloader gauge
 const pre=document.getElementById('preloader');const fill=document.getElementById('fill');const pct=document.getElementById('pct');let v=0;
-if(pre){const ease=t=>1-Math.pow(1-t,3);function tick(){v=Math.min(100,v+(Math.random()*2+1.5));const p=ease(v/100);fill.style.width=(p*100).toFixed(2)+'%';pct.textContent=Math.round(v)+'%';if(v<100)requestAnimationFrame(tick);else setTimeout(()=>pre.classList.add('is-hidden'),300)}requestAnimationFrame(tick);}
+
+/* === 프리로더 스킵 (서브페이지→메뉴로 홈 올 때 로딩창 생략) === */
+if (pre && sessionStorage.getItem('skipPreloader') === '1') {
+  pre.style.display = 'none';               // 프리로더 즉시 숨김
+  try { sessionStorage.removeItem('skipPreloader'); } catch {}
+}
+/* =========================================================== */
+
+if (pre && pre.style.display !== 'none') {
+  const ease = t => 1 - Math.pow(1 - t, 3);
+  function tick(){
+    v = Math.min(100, v + (Math.random()*2 + 1.5));
+    const p = ease(v/100);
+    fill.style.width = (p*100).toFixed(2) + '%';
+    pct.textContent  = Math.round(v) + '%';
+    if (v < 100) requestAnimationFrame(tick);
+    else setTimeout(() => pre.classList.add('is-hidden'), 300);
+  }
+  requestAnimationFrame(tick);
+}
 
 // Reveal (간단)
 const io=new IntersectionObserver((e)=>{e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('is-shown');io.unobserve(x.target)}})},{threshold:0.18});
@@ -15,30 +34,34 @@ window.addEventListener('load', ()=>{positionEyesByIndex();onScroll();});
 window.addEventListener('mousemove', (e)=>{if(!eyes)return;const cx=window.innerWidth/2, cy=window.innerHeight/2;const dx=(e.clientX-cx)/window.innerWidth; const dy=(e.clientY-cy)/window.innerHeight;const px=dx*5.5, py=dy*1.8;document.querySelectorAll('.eye').forEach((eye,i)=>{eye.style.transform=`translate(${px+(i?2:-2)}px, ${py}px)`;});});
 
 // Fullscreen overlay menu
+
 const body=document.body;const burger=document.querySelector('.burger');const overlay=document.getElementById('nav-overlay');
 function openNav(){if(!overlay)return;body.classList.add('nav-open');overlay.hidden=false;requestAnimationFrame(()=>overlay.classList.add('is-open'));burger&&burger.setAttribute('aria-expanded','true');}
 function closeNav(){if(!overlay)return;overlay.classList.remove('is-open');burger&&burger.setAttribute('aria-expanded','false');body.classList.remove('nav-open');setTimeout(()=>overlay.hidden=true,280);}
 burger&&burger.addEventListener('click',()=>{const expanded=burger.getAttribute('aria-expanded')==='true';expanded?closeNav():openNav();});
 window.addEventListener('keydown',(e)=>{if(e.key==='Escape' && overlay && overlay.classList.contains('is-open')) closeNav();});
 
-// Smooth scroll for data-target (no URL change)
-function basePath(){return window.location.pathname.split('#')[0];}
+// Smooth scroll for data-target (메인에선 스크롤, 서브에선 홈#섹션으로 이동)
+function basePath(){ return window.location.pathname.split('#')[0]; }
+
 document.querySelectorAll('[data-target]').forEach(a=>{
   a.addEventListener('click',(e)=>{
     e.preventDefault();
-    const id=a.getAttribute('data-target'); // ex) 'about' / 'services'
+    const id = a.getAttribute('data-target');   // "about" / "services" / "top"
     closeNav();
-    setTimeout(()=>{
-      const el=id==='top'?document.body:document.getElementById(id);
-      if(el){
-        if(id==='top') window.scrollTo({top:0,behavior:'smooth'});
-        else el.scrollIntoView({behavior:'smooth',block:'start'});
-        history.replaceState(null,'',basePath());
-      }else{
-        // 현재 페이지에 섹션이 없으면 홈의 해당 섹션으로 보냄
-        window.location.href = `index.html#${id}`;
-      }
-    },240);
+
+    // 현재 페이지에 해당 섹션이 있으면 스크롤
+    const el = (id==='top') ? document.body : document.getElementById(id);
+    if (el) {
+      if (id==='top') window.scrollTo({top:0, behavior:'smooth'});
+      else el.scrollIntoView({behavior:'smooth', block:'start'});
+      history.replaceState(null,'',basePath());
+      return;
+    }
+
+    // 서브페이지라 섹션이 없으면 → 홈으로 이동 + 프리로더 생략
+    try { sessionStorage.setItem('skipPreloader','1'); } catch {}
+    window.location.href = `index.html#${id}`;
   });
 });
 document.querySelectorAll('.brand').forEach(b=>{

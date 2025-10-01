@@ -8,7 +8,8 @@ body{font-family:'Pretendard Variable',Pretendard,ui-sans-serif,system-ui,'Noto 
 .right-block{display:flex;justify-content:flex-end}.right-block .desc{max-width:56ch;color:var(--muted)}
 
 /* preloader */
-#preloader{position:fixed;inset:0;background:#0f1115;display:grid;place-items:center;z-index:200}
+#preloader{position:fixed;inset:0;background:#0f1115;display:grid;place-items:center;place-items:center;z-index:200}
+#preloader .frame{padding-inline:0;max-width:none}  /* frame 기본 패딩 제거 */
 #preloader.is-hidden{opacity:0;visibility:hidden;transition:opacity .35s,visibility .35s}
 .loader .track{position:relative;width:min(520px,72vw);height:12px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden}
 .loader .fill{height:100%;width:0;background:linear-gradient(90deg,var(--brand),#8891ff);border-radius:999px;box-shadow:0 6px 20px rgba(85,94,255,.35)}
@@ -17,9 +18,9 @@ body{font-family:'Pretendard Variable',Pretendard,ui-sans-serif,system-ui,'Noto 
 .loader .stat{margin-top:12px;text-align:center;color:#cdd1dc;font-weight:800}
 
 /* header */
-.site-header{position:fixed;inset:0 0 auto 0;z-index:80}
+.site-header{position:fixed;inset:0 0 auto 0;z-index:240} 
 .nav{display:flex;align-items:center;justify-content:space-between;padding-block:14px}
-brand{display:block;width:92px;height:26px;background:url('images/logo.svg') center/contain no-repeat}
+.brand{display:block;width:92px;height:26px;background:url('images/logo.svg') center/contain no-repeat}
 body.nav-open .brand{opacity:0;pointer-events:none;transition:opacity .35s}
 
 /* burger */
@@ -31,7 +32,7 @@ body.nav-open .burger span:nth-child(3){transform:translateY(-7px) rotate(-45deg
 body.nav-open .burger span{background:#fff}
 
 /* overlay */
-.nav-overlay{position:fixed;inset:0;background:rgba(0,0,0,.9);color:#fff;z-index:120;display:grid;grid-template-rows:1fr auto;opacity:0;visibility:hidden;transition:opacity .35s,visibility .35s}
+.nav-overlay{position:fixed;inset:0;background:rgba(0,0,0,.9);color:#fff;z-index:200;display:grid;grid-template-rows:1fr auto;opacity:0;visibility:hidden;transition:opacity .35s,visibility .35s}
 .nav-overlay.is-open{opacity:1;visibility:visible}
 .overlay-inner{display:contents}
 .overlay-nav{display:flex;align-items:center;justify-content:center}
