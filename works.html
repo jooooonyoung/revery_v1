@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Works – Revery</title>
+  <link rel="preload" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css" as="style">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css">
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body class="page-white">
+<header class="site-header">
+  <div class="nav frame">
+    <a class="brand" href="/" aria-label="revery home"></a>
+    <button class="burger" aria-expanded="false" aria-controls="nav-overlay" aria-label="menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<aside id="nav-overlay" class="nav-overlay" hidden>
+  <div class="overlay-inner frame">
+    <nav class="overlay-nav" aria-label="Primary">
+      <ul class="mega-row">
+        <li class="mega-item"><a class="mega-link" href="/#about" data-target="about">about</a>
+          <ul class="sub show"><li><span>introduce</span></li><li><span>history</span></li><li><span>client</span></li></ul></li>
+        <li class="mega-item"><a class="mega-link" href="/#services" data-target="services">service</a>
+          <ul class="sub show"><li><span>SNS</span></li><li><span>WEB</span></li><li><span>VIDEO</span></li><li><span>PACKAGE</span></li></ul></li>
+        <li class="mega-item"><a class="mega-link" href="./works.html">works</a>
+          <ul class="sub show"><li><span>ALL</span></li><li><span>SNS</span></li><li><span>WEB</span></li><li><span>VIDEO</span></li><li><span>PACKAGE</span></li></ul></li>
+        <li class="mega-item"><a class="mega-link" href="./contact.html">contact</a>
+          <ul class="sub show"><li><span>request</span></li><li><span>email</span></li></ul></li>
+      </ul>
+    </nav>
+    <div class="overlay-meta"><p>© Revery</p></div>
+  </div>
+</aside>
+
+<main class="page-wrap">
+  <section class="frame works-hero">
+    <h1 class="logo-font works-slogan">share the value of<br class="br"> creative</h1>
+    <nav class="works-cats" aria-label="Categories">
+      <button class="cat is-active" data-filter="all">ALL</button>
+      <button class="cat" data-filter="sns">SNS</button>
+      <button class="cat" data-filter="web">WEB</button>
+      <button class="cat" data-filter="video">VIDEO</button>
+      <button class="cat" data-filter="package">PACKAGE</button>
+    </nav>
+  </section>
+
+  <section class="frame works-list">
+    <div class="grid">
+      <a class="item" data-cat="video" href="#" aria-label="Voghair"></a>
+      <a class="item" data-cat="video" href="#" aria-label="Lumina"></a>
+      <a class="item" data-cat="video" href="#" aria-label="Papago"></a>
+      <a class="item" data-cat="sns" href="#" aria-label="Papago SNS"></a>
+      <a class="item" data-cat="web" href="#" aria-label="Web"></a>
+      <a class="item" data-cat="package" href="#" aria-label="Package"></a>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer white"><div class="frame"><small>© Revery. All rights reserved.</small></div></footer>
+<script src="./app.js" defer></script>
+</body>
+</html>

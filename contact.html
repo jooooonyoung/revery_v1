@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contact – Revery</title>
+  <link rel="preload" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css" as="style">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css">
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body class="page-white">
+<header class="site-header">
+  <div class="nav frame">
+    <a class="brand" href="/" aria-label="revery home"></a>
+    <button class="burger" aria-expanded="false" aria-controls="nav-overlay" aria-label="menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<aside id="nav-overlay" class="nav-overlay" hidden>
+  <div class="overlay-inner frame">
+    <nav class="overlay-nav" aria-label="Primary">
+      <ul class="mega-row">
+        <li class="mega-item"><a class="mega-link" href="/#about" data-target="about">about</a>
+          <ul class="sub show"><li><span>introduce</span></li><li><span>history</span></li><li><span>client</span></li></ul></li>
+        <li class="mega-item"><a class="mega-link" href="/#services" data-target="services">service</a>
+          <ul class="sub show"><li><span>SNS</span></li><li><span>WEB</span></li><li><span>VIDEO</span></li><li><span>PACKAGE</span></li></ul></li>
+        <li class="mega-item"><a class="mega-link" href="./works.html">works</a>
+          <ul class="sub show"><li><span>ALL</span></li><li><span>SNS</span></li><li><span>WEB</span></li><li><span>VIDEO</span></li><li><span>PACKAGE</span></li></ul></li>
+        <li class="mega-item"><a class="mega-link" href="./contact.html">contact</a>
+          <ul class="sub show"><li><span>request</span></li><li><span>email</span></li></ul></li>
+      </ul>
+    </nav>
+    <div class="overlay-meta"><p>© Revery</p></div>
+  </div>
+</aside>
+
+<main class="page-wrap">
+  <section class="frame contact-wrap">
+    <div class="contact-left">
+      <h1 class="logo-font contact-title">contact</h1>
+      <p class="contact-copy">리버리는 프로젝트 문의를 환영합니다.<br>가능한 자세히 남겨주시면 빠르게 회신드릴게요.</p>
+    </div>
+    <form class="contact-form" onsubmit="event.preventDefault(); alert('제출되었습니다.');">
+      <div class="row">
+        <label>성함<input type="text" required></label>
+        <label>이메일<input type="email" required></label>
+      </div>
+      <div class="row">
+        <label>연락처<input type="tel"></label>
+        <label>회사명/브랜드<input type="text"></label>
+      </div>
+      <label>프로젝트 유형<select><option>브랜딩</option><option>웹/앱</option><option>SNS</option><option>영상</option><option>패키지</option></select></label>
+      <label>예산 범위<select><option>미정</option><option>~ 500만</option><option>500만 ~ 1천만</option><option>1천만 ~</option></select></label>
+      <label>프로젝트 내용<textarea rows="6" placeholder="원하는 작업과 참고 링크 등을 자유롭게 적어주세요."></textarea></label>
+      <button class="btn-submit" type="submit">문의하기</button>
+    </form>
+  </section>
+</main>
+
+<footer class="site-footer white"><div class="frame"><small>© Revery. All rights reserved.</small></div></footer>
+<script src="./app.js" defer></script>
+</body>
+</html>
