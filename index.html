@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ko"></html>
+<html lang="ko">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -10,90 +10,62 @@
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
-<!-- Preloader: gauge bar -->
-<div id="preloader" aria-hidden="true">
-  <div class="loader frame">
-    <div class="track"><div class="fill" id="fill"></div><div class="shine"></div></div>
-    <div class="stat"><span class="pct" id="pct">0%</span></div>
-  </div>
-</div>
+  <!-- 공통 헤더/메뉴 주입 (partials/chrome.html) -->
+  <div data-include="partials/chrome.html"></div>
 
-<header class="site-header">
-  <div class="nav frame">
-<a class="brand" href="index.html" aria-label="revery home"></a>
-
-    <button id="hamburger" class="burger" aria-expanded="false" aria-controls="nav-overlay" aria-label="menu">
-      <span></span><span></span><span></span>
-    </button>
-  </div>
-</header>
-
-<!-- Fullscreen overlay menu (Home 제거) -->
-<aside id="nav-overlay" class="nav-overlay" hidden>
-  <div class="overlay-inner frame">
-    <nav class="overlay-nav" role="navigation" aria-label="Primary">
-      <ul class="mega-row">
-        <li class="mega-item">
-          <a class="mega-link" href="index.html#about">about</a>
-          <ul class="sub show"><li><span>introduce</span></li><li><span>history</span></li><li><span>client</span></li></ul>
-        </li>
-        <li class="mega-item">
-          <a class="mega-link" href="index.html#services">service</a>
-          <ul class="sub show"><li><span>SNS</span></li><li><span>WEB</span></li><li><span>VIDEO</span></li><li><span>PACKAGE</span></li></ul>
-        </li>
-        <li class="mega-item">
-          <a class="mega-link" href="./works.html">works</a>
-          <ul class="sub show"><li><span>ALL</span></li><li><span>SNS</span></li><li><span>WEB</span></li><li><span>VIDEO</span></li><li><span>PACKAGE</span></li></ul>
-        </li>
-        <li class="mega-item">
-          <a class="mega-link" href="./contact.html">contact</a>
-          <ul class="sub show"><li><span>request</span></li><li><span>email</span></li></ul>
-        </li>
-      </ul>
-    </nav>
-  </div>
-</aside>
-
-<main id="top">
-  <!-- Sticky hero with logo & eyes -->
-  <section class="hero-wrap">
-    <div class="hero sticky">
-<img class="logo-big" src="images/logo_x.svg" alt="revery logo"
-     data-letters="revery"
-     data-eye-index="5"      
-     data-eye-xbias="-0.44"  
-     data-eye-y="0.37">      <!-- +우측 / -좌측 으로 이동 / 0~1: 이미지 높이 비율 -->
-      <div class="eyes"><span class="eye"></span><span class="eye"></span></div>
+  <!-- Preloader: gauge bar -->
+  <div id="preloader" aria-hidden="true">
+    <div class="loader frame">
+      <div class="track"><div class="fill" id="fill"></div><div class="shine"></div></div>
+      <div class="stat"><span class="pct" id="pct">0%</span></div>
     </div>
-  </section>
+  </div>
 
-  <!-- About -->
-  <section id="about" class="panel panel-about">
-    <div class="frame two center">
-      <h2 class="logo-font left-title">what i can do for you</h2>
-      <div class="right-block">
-        <p class="desc">리버리는 마케팅, 디자인에 필요한 모든 프로젝트를 진행하며, 고객과의 신뢰와 아이디어를 비주얼화 하는데에 집중합니다.</p>
+  <main id="top">
+    <!-- Sticky hero with logo & eyes -->
+    <section class="hero-wrap">
+      <div class="hero sticky">
+        <img class="logo-big" src="images/logo_x.svg" alt="revery logo"
+             data-letters="revery"
+             data-eye-index="5"
+             data-eye-xbias="-0.44"
+             data-eye-y="0.37">
+        <div class="eyes"><span class="eye"></span><span class="eye"></span></div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Services 2×2 -->
-  <section id="services" class="panel panel-services">
-    <div class="frame two center">
-      <h2 class="logo-font left-title">our services</h2>
-      <div class="right-block">
-        <div class="services">
-          <article class="svc"><h3>SNS 디자인</h3><ul><li>인스타그램 피드, 광고</li><li>유튜브 썸네일</li><li>각종 채널 광고</li></ul></article>
-          <article class="svc"><h3>웹디자인</h3><ul><li>상세페이지, 프로모션, 배너(전채널)</li><li>웹사이트 개설, UI/UX디자인, 유지보수(유료 웹호스팅 활용)</li></ul></article>
-          <article class="svc"><h3>영상 디자인</h3><ul><li>모션그래픽, 일러스트레이터, 로고 애니메이션</li><li>유튜브 영상 편집</li><li>자체 BGM 소스 보유, 효과음&</li></ul></article>
-          <article class="svc"><h3>패키지 디자인</h3><ul><li>제품 단상자, 제품 용기, 리플렛, 브로셔, 명함 등</li><li>목업이미지, 연출컷 AI 합성</li></ul></article>
+    <!-- About -->
+    <section id="about" class="panel panel-about">
+      <div class="frame two center">
+        <h2 class="logo-font left-title">what i can do for you</h2>
+        <div class="right-block">
+          <p class="desc">리버리는 마케팅, 디자인에 필요한 모든 프로젝트를 진행하며, 고객과의 신뢰와 아이디어를 비주얼화 하는데에 집중합니다.</p>
         </div>
       </div>
-    </div>
-  </section>
-</main>
+    </section>
 
-<footer class="site-footer"><div class="frame"><small>© Revery. All rights reserved.</small></div></footer>
-<script src="js/app.js" defer></script>
+    <!-- Services 2×2 -->
+    <section id="services" class="panel panel-services">
+      <div class="frame two center">
+        <h2 class="logo-font left-title">our services</h2>
+        <div class="right-block">
+          <div class="services">
+            <article class="svc"><h3>SNS 디자인</h3><ul><li>인스타그램 피드, 광고</li><li>유튜브 썸네일</li><li>각종 채널 광고</li></ul></article>
+            <article class="svc"><h3>웹디자인</h3><ul><li>상세페이지, 프로모션, 배너(전채널)</li><li>웹사이트 개설, UI/UX디자인, 유지보수(유료 웹호스팅 활용)</li></ul></article>
+            <article class="svc"><h3>영상 디자인</h3><ul><li>모션그래픽, 일러스트레이터, 로고 애니메이션</li><li>유튜브 영상 편집</li><li>자체 BGM 소스 보유, 효과음&</li></ul></article>
+            <article class="svc"><h3>패키지 디자인</h3><ul><li>제품 단상자, 제품 용기, 리플렛, 브로셔, 명함 등</li><li>목업이미지, 연출컷 AI 합성</li></ul></article>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="frame"><small>© Revery. All rights reserved.</small></div>
+  </footer>
+
+  <!-- include.js를 먼저, app.js는 나중 (둘 다 defer) -->
+  <script src="js/include.js" defer></script>
+  <script src="js/app.js" defer></script>
 </body>
 </html>

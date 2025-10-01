@@ -61,45 +61,125 @@ function eyeLoop(){
 eyeLoop();
 // Fullscreen overlay menu
 
-const body=document.body;const burger=document.querySelector('.burger');const overlay=document.getElementById('nav-overlay');
-function openNav(){if(!overlay)return;body.classList.add('nav-open');overlay.hidden=false;requestAnimationFrame(()=>overlay.classList.add('is-open'));burger&&burger.setAttribute('aria-expanded','true');}
-function closeNav(){if(!overlay)return;overlay.classList.remove('is-open');burger&&burger.setAttribute('aria-expanded','false');body.classList.remove('nav-open');setTimeout(()=>overlay.hidden=true,280);}
-burger&&burger.addEventListener('click',()=>{const expanded=burger.getAttribute('aria-expanded')==='true';expanded?closeNav():openNav();});
-window.addEventListener('keydown',(e)=>{if(e.key==='Escape' && overlay && overlay.classList.contains('is-open')) closeNav();});
+// ===== 공통 메뉴 초기화 (partials 주입 이후 1회만 바인딩) =====
+(function(){
+  let bound = false;
+
+  function initNav(){
+    if (bound) return;
+    const body = document.body;
+    const burger = document.querySelector('.burger');
+    const overlay = document.getElementById('nav-overlay');
+    if (!burger || !overlay) return; // 아직 파셜 미주입
+
+    // 중복 바인딩 방지
+    if (overlay.dataset.bound === '1') return;
+    overlay.dataset.bound = '1';
+    bound = true;
+
+    // 원형 커서 엘리먼트 자동 생성(없으면)
+    let oCursor = document.getElementById('overlay-cursor');
+    if (!oCursor){
+      oCursor = document.createElement('div');
+      oCursor.id = 'overlay-cursor';
+      oCursor.className = 'overlay-cursor';
+      document.body.appendChild(oCursor);
+    }
+    let lastMX = null, lastMY = null;
+
+    function openNav(){
+      body.classList.add('nav-open');
+      overlay.hidden = false;
+      requestAnimationFrame(()=>overlay.classList.add('is-open'));
+      burger.setAttribute('aria-expanded','true');
+
+      // 커서 초기 위치(버거 중심)
+      const r = burger.getBoundingClientRect();
+      const x = (lastMX ?? (r.left + r.width/2));
+      const y = (lastMY ?? (r.top  + r.height/2));
+      oCursor.style.left = x + 'px';
+      oCursor.style.top  = y + 'px';
+    }
+    function closeNav(){
+      overlay.classList.remove('is-open');
+      burger.setAttribute('aria-expanded','false');
+      body.classList.remove('nav-open');
+      setTimeout(()=>overlay.hidden = true, 280);
+    }
+
+    burger.addEventListener('click', (e)=>{
+      if(e){ lastMX = e.clientX; lastMY = e.clientY; }
+      const expanded = burger.getAttribute('aria-expanded')==='true';
+      expanded ? closeNav() : openNav();
+    });
+    window.addEventListener('keydown', (e)=>{
+      if(e.key==='Escape' && overlay.classList.contains('is-open')) closeNav();
+    });
+
+    // 커서 위치/축소
+    window.addEventListener('mousemove',(e)=>{
+      lastMX = e.clientX; lastMY = e.clientY;
+      if(!body.classList.contains('nav-open')) return;
+      oCursor.style.left = lastMX + 'px';
+      oCursor.style.top  = lastMY + 'px';
+    });
+    const hoverTargets = document.querySelectorAll('#nav-overlay a, .burger');
+    hoverTargets.forEach(el=>{
+      el.addEventListener('mouseenter', ()=> oCursor.classList.add('shrink'));
+      el.addEventListener('mouseleave', ()=> oCursor.classList.remove('shrink'));
+    });
+
+    // 링크 동작: #섹션이면 스무스 스크롤, 아니면 기본 이동
+    function basePath(){ return window.location.pathname.split('#')[0]; }
+    document.querySelectorAll('#nav-overlay a').forEach(a=>{
+      a.addEventListener('click',(e)=>{
+        const href = a.getAttribute('href') || '';
+        const m = href.match(/#([A-Za-z0-9_-]+)/);
+        if(!m){ closeNav(); return; } // 일반 링크는 기본 이동
+        const id = m[1];
+        e.preventDefault();
+        closeNav();
+
+        const el = (id==='top') ? document.body : document.getElementById(id);
+        if (el){
+          setTimeout(()=>{
+            if(id==='top') window.scrollTo({top:0,behavior:'smooth'});
+            else el.scrollIntoView({behavior:'smooth',block:'start'});
+            history.replaceState(null,'',basePath());
+          },220);
+        }else{
+          // 서브 → 홈#섹션 이동(프리로더 생략)
+          try { sessionStorage.setItem('skipPreloader','1'); } catch {}
+          window.location.href = `index.html#${id}`;
+        }
+      });
+    });
+
+    // 로고 클릭: 홈이면 스크롤, 서브면 홈으로
+    document.querySelectorAll('.brand').forEach(b=>{
+      b.addEventListener('click',(e)=>{
+        e.preventDefault();
+        closeNav();
+        const isHome = !!document.querySelector('.hero-wrap');
+        if (isHome){
+          setTimeout(()=>{ window.scrollTo({top:0,behavior:'smooth'}); history.replaceState(null,'',basePath()); }, 120);
+        }else{
+          try { sessionStorage.setItem('skipPreloader','1'); } catch {}
+          window.location.href = 'index.html';
+        }
+      });
+    });
+  }
+
+  // 파셜 주입 후/ DOM 준비 후 초기화
+  document.addEventListener('partials:loaded', initNav);
+  document.addEventListener('DOMContentLoaded', initNav);
+})();
+
 
 // --- 메뉴 링크 공통 처리: #about/#services 포함 링크 전부 처리 ---
 function basePath(){ return window.location.pathname.split('#')[0]; }
 
-document.querySelectorAll('#nav-overlay a').forEach(a=>{
-  a.addEventListener('click',(e)=>{
-    const href = a.getAttribute('href') || '';
-    const m = href.match(/#([A-Za-z0-9_-]+)/);
-    if(!m){
-      // works.html / contact.html 등 다른 페이지 이동 링크는 기본 동작
-      if (typeof closeNav === 'function') closeNav();
-      return;
-    }
-
-    const id = m[1];           // 'about' / 'services' / 'top'
-    e.preventDefault();
-    if (typeof closeNav === 'function') closeNav();
-
-    // 현재 페이지(홈)에 섹션이 있으면 부드럽게 스크롤
-    const el = (id==='top') ? document.body : document.getElementById(id);
-    if (el){
-      setTimeout(()=>{
-        if(id==='top') window.scrollTo({top:0,behavior:'smooth'});
-        else el.scrollIntoView({behavior:'smooth',block:'start'});
-        history.replaceState(null,'',basePath());
-      },220); // 닫힘 애니 끝난 후 이동
-      return;
-    }
-
-    // 서브 → 홈 섹션으로 (프리로더 생략)
-    try { sessionStorage.setItem('skipPreloader','1'); } catch {}
-    window.location.href = `index.html#${id}`;
-  });
-});
 
 // --- 로고(좌상단) 클릭: 홈이면 상단 스크롤, 서브면 홈으로 ---
 document.querySelectorAll('.brand').forEach(b=>{
@@ -116,15 +196,3 @@ document.querySelectorAll('.brand').forEach(b=>{
   });
 });
 
-// Works page category filters
-document.querySelectorAll('.works-cats .cat').forEach(btn=>{
-  btn.addEventListener('click',()=>{
-    document.querySelectorAll('.works-cats .cat').forEach(b=>b.classList.remove('is-active'));
-    btn.classList.add('is-active');
-    const f=btn.dataset.filter;
-    document.querySelectorAll('.works-list .item').forEach(it=>{
-      const ok=(f==='all')||it.dataset.cat===f;
-      it.style.display=ok?'block':'none';
-    });
-  });
-});
