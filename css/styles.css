@@ -11,7 +11,8 @@ body{font-family:'Pretendard Variable',Pretendard,ui-sans-serif,system-ui,'Noto 
 #preloader{position:fixed;inset:0;background:#0f1115;display:grid;place-items:center;place-items:center;z-index:200}
 #preloader .frame{padding-inline:0;max-width:none}  /* frame 기본 패딩 제거 */
 #preloader.is-hidden{opacity:0;visibility:hidden;transition:opacity .35s,visibility .35s}
-.loader .track{position:relative;width:min(520px,72vw);height:12px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden}
+.loader{display:grid;justify-items:center}
+.loader .track{position:relative;width:min(520px,72vw);height:12px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden;margin-inline:auto}
 .loader .fill{height:100%;width:0;background:linear-gradient(90deg,var(--brand),#8891ff);border-radius:999px;box-shadow:0 6px 20px rgba(85,94,255,.35)}
 .loader .shine{position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);mix-blend:screen;animation:shine 1.8s linear infinite}
 @keyframes shine{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}

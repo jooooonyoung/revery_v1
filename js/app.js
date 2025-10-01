@@ -41,31 +41,54 @@ function closeNav(){if(!overlay)return;overlay.classList.remove('is-open');burge
 burger&&burger.addEventListener('click',()=>{const expanded=burger.getAttribute('aria-expanded')==='true';expanded?closeNav():openNav();});
 window.addEventListener('keydown',(e)=>{if(e.key==='Escape' && overlay && overlay.classList.contains('is-open')) closeNav();});
 
-// Smooth scroll for data-target (메인에선 스크롤, 서브에선 홈#섹션으로 이동)
+// --- 메뉴 링크 공통 처리: 홈/서브 모두 동작, 항상 먼저 닫기 ---
 function basePath(){ return window.location.pathname.split('#')[0]; }
 
-document.querySelectorAll('[data-target]').forEach(a=>{
+document.querySelectorAll('#nav-overlay a').forEach(a=>{
   a.addEventListener('click',(e)=>{
-    e.preventDefault();
-    const id = a.getAttribute('data-target');   // "about" / "services" / "top"
-    closeNav();
-
-    // 현재 페이지에 해당 섹션이 있으면 스크롤
-    const el = (id==='top') ? document.body : document.getElementById(id);
-    if (el) {
-      if (id==='top') window.scrollTo({top:0, behavior:'smooth'});
-      else el.scrollIntoView({behavior:'smooth', block:'start'});
-      history.replaceState(null,'',basePath());
+    const href = a.getAttribute('href') || '';
+    const m = href.match(/#([A-Za-z0-9_-]+)/);
+    if(!m){ 
+      // works.html, contact.html 같은 외부/다른 페이지 링크는 기본 동작
+      if (typeof closeNav === 'function') closeNav();
       return;
     }
 
-    // 서브페이지라 섹션이 없으면 → 홈으로 이동 + 프리로더 생략
+    // #about / #services / #top 등 앵커 대상인 경우
+    const id = m[1];
+    e.preventDefault();
+    if (typeof closeNav === 'function') closeNav();
+
+    // 현재 페이지(홈)에 섹션이 있으면 스크롤
+    const targetEl = (id==='top') ? document.body : document.getElementById(id);
+    if (targetEl){
+      setTimeout(()=>{
+        if(id==='top') window.scrollTo({top:0,behavior:'smooth'});
+        else targetEl.scrollIntoView({behavior:'smooth',block:'start'});
+        history.replaceState(null,'',basePath());
+      },220); // 닫힘 애니 끝난 뒤 스크롤
+      return;
+    }
+
+    // 서브페이지라 섹션이 없으면 → 홈으로 이동(+프리로더 생략)
     try { sessionStorage.setItem('skipPreloader','1'); } catch {}
     window.location.href = `index.html#${id}`;
   });
 });
+
+// --- 로고(좌상단) 클릭: 홈이면 상단 스크롤, 서브면 홈으로 ---
 document.querySelectorAll('.brand').forEach(b=>{
-  b.addEventListener('click',(e)=>{e.preventDefault();closeNav();window.scrollTo({top:0,behavior:'smooth'});history.replaceState(null,'',basePath());});
+  b.addEventListener('click',(e)=>{
+    e.preventDefault();
+    if (typeof closeNav === 'function') closeNav();
+    const isHome = !!document.querySelector('.hero-wrap');
+    if (isHome){
+      setTimeout(()=>{ window.scrollTo({top:0,behavior:'smooth'}); history.replaceState(null,'',basePath()); }, 120);
+    }else{
+      try { sessionStorage.setItem('skipPreloader','1'); } catch {}
+      window.location.href = 'index.html';
+    }
+  });
 });
 
 // Works page category filters
