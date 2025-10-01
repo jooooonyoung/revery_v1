@@ -19,7 +19,7 @@ body{font-family:'Pretendard Variable',Pretendard,ui-sans-serif,system-ui,'Noto 
 /* header */
 .site-header{position:fixed;inset:0 0 auto 0;z-index:80}
 .nav{display:flex;align-items:center;justify-content:space-between;padding-block:14px}
-.brand{display:block;width:92px;height:26px;background:url('./assets/logo_x.svg') center/contain no-repeat}
+brand{display:block;width:92px;height:26px;background:url('images/logo.svg') center/contain no-repeat}
 body.nav-open .brand{opacity:0;pointer-events:none;transition:opacity .35s}
 
 /* burger */

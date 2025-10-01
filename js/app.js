@@ -26,14 +26,18 @@ function basePath(){return window.location.pathname.split('#')[0];}
 document.querySelectorAll('[data-target]').forEach(a=>{
   a.addEventListener('click',(e)=>{
     e.preventDefault();
-    const id=a.getAttribute('data-target');
+    const id=a.getAttribute('data-target'); // ex) 'about' / 'services'
     closeNav();
     setTimeout(()=>{
       const el=id==='top'?document.body:document.getElementById(id);
-      if(!el) return;
-      if(id==='top') window.scrollTo({top:0,behavior:'smooth'});
-      else el.scrollIntoView({behavior:'smooth',block:'start'});
-      history.replaceState(null,'',basePath());
+      if(el){
+        if(id==='top') window.scrollTo({top:0,behavior:'smooth'});
+        else el.scrollIntoView({behavior:'smooth',block:'start'});
+        history.replaceState(null,'',basePath());
+      }else{
+        // 현재 페이지에 섹션이 없으면 홈의 해당 섹션으로 보냄
+        window.location.href = `index.html#${id}`;
+      }
     },240);
   });
 });
