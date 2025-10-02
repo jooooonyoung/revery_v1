@@ -27,7 +27,16 @@ document.querySelectorAll('.left-title,.desc,.svc').forEach(el=>{el.classList.ad
 
 // Hero eyes & parallax
 const hero=document.querySelector('.hero');const heroWrap=document.querySelector('.hero-wrap');const logoBig=document.querySelector('.logo-big');const eyes=document.querySelector('.eyes');
-function onScroll(){if(!heroWrap||!logoBig)return;const r=heroWrap.getBoundingClientRect();const total=Math.max(1,r.height-window.innerHeight);const prog=Math.min(1,Math.max(0,(window.innerHeight-r.bottom)/total));const sc=1-prog*0.07;const ty=prog*24;const op=1-prog*0.25;logoBig.style.transform=`translate(-50%, ${-ty}%) scale(${sc})`;logoBig.style.opacity=op;if(eyes){eyes.style.opacity=op;positionEyesByIndex();}}
+function onScroll(){if(!heroWrap||!logoBig)return;const r=heroWrap.getBoundingClientRect();const total=Math.max(1,r.height-window.innerHeight);const prog=Math.min(1,Math.max(0,(window.innerHeight-r.bottom)/total));const sc = 1 - prog * 0.06;         // 살짝만 축소
+const ty = prog * 24;
+// 스크롤될수록 완전히 사라지게(=0까지)
+let op = 1 - prog * 1.15;           
+if (op < 0) op = 0;
+logoBig.style.transform = `translate(-50%, ${-ty}%) scale(${sc})`;
+logoBig.style.opacity   = op;
+if (eyes) { eyes.style.opacity = op; positionEyesByIndex(); }
+}
+
 window.addEventListener('scroll', onScroll, {passive:true});window.addEventListener('resize', onScroll);
 function positionEyesByIndex(){if(!logoBig||!eyes||!hero)return;const lettersStr=(logoBig.dataset.letters||'revery');const N=Math.max(1,lettersStr.length);const idx=Math.max(0,Math.min(N-1,parseInt(logoBig.dataset.eyeIndex??(N-1),10)||0));const xbias=parseFloat(logoBig.dataset.eyeXbias||'0');const yPct=parseFloat(logoBig.dataset.eyeY||'0.35');const rect=logoBig.getBoundingClientRect();const hrect=hero.getBoundingClientRect();const slot=rect.width/N;const anchorX=(rect.left-hrect.left)+idx*slot+slot*(0.5+xbias);const anchorY=(rect.top-hrect.top)+rect.height*yPct;const ew=eyes.offsetWidth||86;const eh=eyes.offsetHeight||38;eyes.style.transform=`translate(${anchorX-ew/2}px, ${anchorY-eh/2}px)`;}
 window.addEventListener('load', ()=>{positionEyesByIndex();onScroll();});
@@ -196,3 +205,50 @@ document.querySelectorAll('.brand').forEach(b=>{
   });
 });
 
+// === Tilt on hover: Our services (SNS/WEB/VIDEO/PACKAGE) ===
+(function(){
+  const wrap = document.querySelector('.services');
+  if (!wrap) return;                 // 홈에만 존재
+
+  const MAX = 8;                     // 최대 회전 각도(도)
+  const Z   = 8;                     // 살짝 띄우기(px)
+  const mql = window.matchMedia('(hover:hover)'); // 터치 기기 제외
+
+  wrap.querySelectorAll('.svc').forEach(card=>{
+    if (!mql.matches) return;
+
+    let raf = null;
+
+    function onMove(e){
+      const r = card.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width;   // 0~1
+      const y = (e.clientY - r.top)  / r.height;  // 0~1
+      // 회전 각 계산
+      const rotY = (x - 0.5) * (MAX * 2);         // 좌우 기울기
+      const rotX = -(y - 0.5) * (MAX * 2);        // 위아래 기울기
+
+      // 하이라이트 위치 전달(선택 사항)
+      card.style.setProperty('--mx', (x*100)+'%');
+      card.style.setProperty('--my', (y*100)+'%');
+
+      if (raf) cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(()=>{
+        card.style.transform = `rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg) translateZ(${Z}px)`;
+      });
+    }
+
+    function onLeave(){
+      if (raf) cancelAnimationFrame(raf);
+      card.style.transform = 'translateZ(0) rotateX(0) rotateY(0)';
+      card.classList.remove('is-tilting');
+    }
+
+    function onEnter(){
+      card.classList.add('is-tilting');
+    }
+
+    card.addEventListener('pointerenter', onEnter);
+    card.addEventListener('pointermove',  onMove);
+    card.addEventListener('pointerleave', onLeave);
+  });
+})();
