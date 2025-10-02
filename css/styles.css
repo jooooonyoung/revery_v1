@@ -19,7 +19,6 @@ body{font-family:'Pretendard Variable',Pretendard,ui-sans-serif,system-ui,'Noto 
 .loader .stat{margin-top:12px;text-align:center;color:#cdd1dc;font-weight:800}
 
 /* header */
-.site-header{position:fixed;inset:0 0 auto 0;z-index:240} 
 .nav{display:flex;align-items:center;justify-content:space-between;padding-block:14px}
 .brand{display:block;width:92px;height:26px;background:url('../images/logo.svg') center/contain no-repeat}
 /* contact 같은 서브페이지에서도 헤더 패딩을 강제 통일 */
@@ -51,11 +50,19 @@ body.nav-open .icon-burger line:nth-child(3){ transform: translateY(-7px) rotate
 .burger:hover .l2{ transform: scaleX(.9); }
 
 .nav-overlay{
-  position:fixed;inset:0;background:rgba(0,0,0,.9);color:#fff;
-  display:grid;grid-template-rows:1fr auto;opacity:0;visibility:hidden;
-  transition:opacity .35s,visibility .35s;
+  position:fixed; inset:0;
+  background:rgba(0,0,0,.9); color:#fff;
+  display:none;                          /* 닫혔을 때 완전히 숨김 */
+  grid-template-rows:1fr auto;
+  opacity:0; visibility:hidden;
+  transition:opacity .35s, visibility .35s;
+  z-index:1000;                          /* 오버레이 층 */
 }
-.nav-overlay.is-open{opacity:1;visibility:visible}
+.nav-overlay.is-open{
+  display:grid !important;               /* 열렸을 때 보이게 */
+  opacity:1; visibility:visible;
+}
+
 .overlay-inner{display:contents}
 .overlay-nav{display:flex;align-items:center;justify-content:center}
 .mega-row{display:flex;gap:clamp(24px,5vw,64px);list-style:none;margin:0;padding:0}
@@ -241,7 +248,7 @@ body.page-white{background:#fff;color:#0d0e12}
 /* header — 흰색 띠 + 헤어라인(그대로) */
 .site-header{
   position:fixed; inset:0 0 auto 0;
-  z-index:500; /* 🔁 헤더를 오버레이보다 아래로 낮춤 */
+  z-index:1200; /* 🔁 헤더를 오버레이보다 아래로 낮춤 */
   background: rgba(255,255,255,.92);
   backdrop-filter: saturate(180%) blur(10px);
   border-bottom: 1px solid rgba(0,0,0,.06);
