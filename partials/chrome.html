@@ -2,7 +2,11 @@
 <header class="site-header">
   <div class="nav frame">
     <a class="brand" href="index.html" aria-label="revery home"></a>
-    <button id="hamburger" class="burger" aria-expanded="false" aria-controls="nav-overlay" aria-label="menu">
+  </div>
+</header>
+
+<!-- ⬇ 헤더 밖(독립)으로 이동. id=hamburger 유지(기존 JS 그대로 동작) -->
+<button id="hamburger" class="nav-toggle" aria-expanded="false" aria-controls="nav-overlay" aria-label="menu">
   <svg class="icon-burger" width="28" height="20" viewBox="0 0 28 20" aria-hidden="true">
     <g stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
       <line class="l1" x1="2" y1="3"  x2="26" y2="3"/>
@@ -11,19 +15,7 @@
     </g>
   </svg>
 </button>
-  </div>
-</header>
 
 <aside id="nav-overlay" class="nav-overlay">
-  <div class="overlay-inner frame">
-    <nav class="overlay-nav" role="navigation" aria-label="Primary">
-      <ul class="mega-row">
-        <li class="mega-item"><a class="mega-link" href="./about.html">about</a></li>
-        <li class="mega-item"><a class="mega-link" href="index.html#services">service</a></li>
-        <li class="mega-item"><a class="mega-link" href="./works.html">works</a></li>
-        <li class="mega-item"><a class="mega-link" href="./contact.html">contact</a></li>
-      </ul>
-    </nav>
-    <div class="overlay-meta"><p>© Revery</p></div>
-  </div>
+  ...
 </aside>
