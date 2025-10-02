@@ -27,10 +27,11 @@ document.querySelectorAll('.left-title,.desc,.svc').forEach(el=>{el.classList.ad
 
 // Hero eyes & parallax
 const hero=document.querySelector('.hero');const heroWrap=document.querySelector('.hero-wrap');const logoBig=document.querySelector('.logo-big');const eyes=document.querySelector('.eyes');
-function onScroll(){if(!heroWrap||!logoBig)return;const r=heroWrap.getBoundingClientRect();const total=Math.max(1,r.height-window.innerHeight);const prog=Math.min(1,Math.max(0,(window.innerHeight-r.bottom)/total));const sc = 1 - prog * 0.06;         // 살짝만 축소
-const ty = prog * 24;
+function onScroll(){if(!heroWrap||!logoBig)return;const r=heroWrap.getBoundingClientRect();const total=Math.max(1,r.height-window.innerHeight);const prog=Math.min(1,Math.max(0,(window.innerHeight-r.bottom)/total));
+const sc = 1 - prog * 0.06;         // 살짝만 축소
+const ty = prog * 42;
 // 스크롤될수록 완전히 사라지게(=0까지)
-let op = 1 - prog * 1.15;           
+let op = 1 - prog * 1.65;           
 if (op < 0) op = 0;
 logoBig.style.transform = `translate(-50%, ${-ty}%) scale(${sc})`;
 logoBig.style.opacity   = op;
@@ -251,4 +252,24 @@ document.querySelectorAll('.brand').forEach(b=>{
     card.addEventListener('pointermove',  onMove);
     card.addEventListener('pointerleave', onLeave);
   });
+})();
+
+// === Reel autoplay helper ===
+(function(){
+  const v = document.getElementById('reelVideo');
+  if (!v) return;
+
+  const tryPlay = () => v.play().catch(()=>{ /* 무음 자동재생 실패시 무시 */ });
+
+  if (document.readyState === 'complete') tryPlay();
+  else window.addEventListener('load', tryPlay, { once:true });
+
+  // 화면에서 벗어나면 일시정지, 다시 보이면 재생 (배터리/CPU 절약)
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if (e.isIntersecting) tryPlay();
+      else v.pause();
+    });
+  }, { threshold: 0.15 });
+  io.observe(v);
 })();
