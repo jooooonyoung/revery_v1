@@ -238,11 +238,13 @@ body.page-white{background:#fff;color:#0d0e12}
    ========================= */
 :root { --header-h: 60px; }
 
+/* header */
 .site-header{
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  height: var(--header-h);
-  z-index: 400;                /* 항상 최상단 */
+  position:fixed;inset:0 0 auto 0;z-index:240;
+  /* 추가: 흰색 띠 배경 + 헤어라인 */
+  background: rgba(255,255,255,.92);
+  backdrop-filter: saturate(180%) blur(10px);
+  border-bottom: 1px solid rgba(0,0,0,.06);
 }
 
 .nav{
