@@ -32,7 +32,7 @@ body{font-family:'Pretendard Variable',Pretendard,ui-sans-serif,system-ui,'Noto 
   color:#111;                                 /* 기본 선 색상 */
 }
 body.nav-open .burger{ color:#fff; }          /* 메뉴 열리면 흰색(원하면 var(--brand)) */
-body.nav-open .brand{ opacity:0; pointer-events:none; transition:opacity .25s ease; }
+/*body.nav-open .brand{ opacity:0; pointer-events:none; transition:opacity .25s ease; } 메뉴오픈시 로고 숨김처리*/
 
 
 .icon-burger line{
@@ -42,16 +42,16 @@ body.nav-open .brand{ opacity:0; pointer-events:none; transition:opacity .25s ea
   vector-effect: non-scaling-stroke;          /* 회전/스케일에도 굵기 고정 */
 }
 
-/* X 상태 변환: 위/아래 선을 중앙으로 모아 교차(가운데 선 숨김) */
-body.nav-open .icon-burger .l1{ transform: translateY(7px) rotate(45deg); }
-body.nav-open .icon-burger .l2{ opacity: 0; }
-body.nav-open .icon-burger .l3{ transform: translateY(-7px) rotate(-45deg); }
+/* HTML에 클래스 없어도 동작 */
+body.nav-open .icon-burger line:nth-child(1){ transform: translateY(7px) rotate(45deg); }
+body.nav-open .icon-burger line:nth-child(2){ opacity: 0; }
+body.nav-open .icon-burger line:nth-child(3){ transform: translateY(-7px) rotate(-45deg); }
 
 /* 호버 시 살짝 강조: 가운데 선만 아주 조금 줄이기(선택) */
 .burger:hover .l2{ transform: scaleX(.9); }
 
 .nav-overlay{
-  position:fixed;inset:0;background:rgba(0,0,0,.9);color:#fff;z-index:200;
+  position:fixed;inset:0;background:rgba(0,0,0,.9);color:#fff;
   display:grid;grid-template-rows:1fr auto;opacity:0;visibility:hidden;
   transition:opacity .35s,visibility .35s;
 }
@@ -445,7 +445,7 @@ body.nav-open .burger{
 
 
 /* ① 로고 무한 루프 */
-.logo-strip{overflow:hidden;border-top:1px solid rgba(0,0,0,.06);border-bottom:1px solid rgba(0,0,0,.06);  padding-block: 280px;  overflow:hidden;}
+.logo-strip{overflow:hidden;padding-block: 280px;}
 .logo-strip .logo-track{display:flex;align-items:center;width:max-content;animation:scroll-left 40s linear infinite;}
 .logo-strip img{height:50px;width:auto;} /* 세로 50px (이미지는 가로 3000~4000px 권장) */
 @keyframes scroll-left{from{transform:translateX(0)}to{transform:translateX(-50%)}}
