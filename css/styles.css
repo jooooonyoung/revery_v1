@@ -238,21 +238,38 @@ body.page-white{background:#fff;color:#0d0e12}
    ========================= */
 :root { --header-h: 60px; }
 
-/* header */
+/* header — 흰색 띠 + 헤어라인(그대로) */
 .site-header{
-  position:fixed;inset:0 0 auto 0;z-index:240;
-  /* 추가: 흰색 띠 배경 + 헤어라인 */
+  position:fixed; inset:0 0 auto 0;
+  z-index:500; /* 🔁 헤더를 오버레이보다 아래로 낮춤 */
   background: rgba(255,255,255,.92);
   backdrop-filter: saturate(180%) blur(10px);
   border-bottom: 1px solid rgba(0,0,0,.06);
 }
 
+/* overlay — 헤더(로고)보다 위, 버거보다 아래 */
+.nav-overlay{
+  position:fixed; inset:0;
+  z-index: 1000;              /* ⬆️ 헤더 위로 */
+  background: rgba(0,0,0,.9);
+  color:#fff;
+  /* (기존 is-open, transition 등 규칙은 그대로 유지) */
+}
+
+/* 메뉴 열렸을 때 버거(X)를 최상단으로 올려 닫기 가능하게 */
+body.nav-open .burger{
+  position: relative;
+  z-index: 1100;              /* ⬆️ 오버레이보다 위 */
+  color:#fff;                 /* X를 흰색으로 */
+}
+
+/* ✅ 로고를 숨기지 않음 (삭제 또는 주석) */
+/* body.nav-open .brand{ opacity:0; pointer-events:none; } */
+
 .nav{
   display:flex; align-items:center; justify-content:space-between;
   padding:14px var(--pad);
 }
-
-.nav-overlay{ z-index: 300; }  /* 헤더보다 아래 (헤더는 항상 보이게) */
 
 .brand{
   display:block; width:92px; height:26px;
@@ -300,7 +317,7 @@ body.page-white{background:#fff;color:#0d0e12}
 .aboutv-sub{ margin:0; font-size: var(--aboutv-sub); opacity:.92; max-width: 60ch }
 
 /* === video === */
-.reel{ margin: 0; padding: 0; }
+.reel{ margin: 0; padding: 0;  padding-block: 380px;}
 
 /* .frame 은 전역에서 padding-inline: var(--pad); max-width:1600px 이미 적용됨 */
 
@@ -425,3 +442,23 @@ body.page-white{background:#fff;color:#0d0e12}
   .reel-box{ aspect-ratio: 4 / 3; }
 
 }
+
+
+/* ① 로고 무한 루프 */
+.logo-strip{overflow:hidden;border-top:1px solid rgba(0,0,0,.06);border-bottom:1px solid rgba(0,0,0,.06);  padding-block: 280px;  overflow:hidden;}
+.logo-strip .logo-track{display:flex;align-items:center;width:max-content;animation:scroll-left 40s linear infinite;}
+.logo-strip img{height:50px;width:auto;} /* 세로 50px (이미지는 가로 3000~4000px 권장) */
+@keyframes scroll-left{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ② 중앙 정렬 타이틀/본문 */
+.center-intro{text-align:center;  padding-block: 380px;} /* 상단 80px + 하단 80px */
+.center-intro h2{font-size:clamp(36px,8vw,104px);letter-spacing:.04em;margin:0 0 16px;}
+.center-intro p{font-size:clamp(16px,2.6vw,22px);color:var(--muted);margin:0 auto;max-width:900px;}
+
+/* ③ 회사소개서 다운로드 CTA */
+.download-cta{background:var(--brand);color:#fff;padding:clamp(40px,6vw,96px) 16px;}
+.download-cta .cta-inner{text-align:center;width:min(960px,92%);margin:0 auto;}
+.download-cta h3{font-size:clamp(28px,5vw,56px);margin:0 0 8px;}
+.download-cta .filetype{opacity:.6;margin:0 0 24px;letter-spacing:.12em;}
+.btn-pill{display:inline-block;padding:14px 32px;border-radius:999px;background:#fff;color:var(--brand);font-weight:800;transition:transform .15s ease,opacity .2s ease;}
+.btn-pill:hover{transform:translateY(-1px);opacity:.94;}
