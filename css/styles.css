@@ -162,7 +162,32 @@ body.page-white{background:#fff;color:#0d0e12}
 /* =========================
    ABOUT (client 스타일 계열)
    ========================= */
+:root { --header-h: 60px; }
 
+.site-header{
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--header-h);
+  z-index: 400;                /* 항상 최상단 */
+}
+
+.nav{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:14px var(--pad);
+}
+
+.nav-overlay{ z-index: 300; }  /* 헤더보다 아래 (헤더는 항상 보이게) */
+
+.brand{
+  display:block; width:92px; height:26px;
+  background:url('../images/logo.svg') center/contain no-repeat;
+}
+
+/* 이 규칙이 있으면 로고가 사라짐 → 있으면 반드시 삭제 */
+ /* body.nav-open .brand{ opacity:0; pointer-events:none; } */
+
+/* 서브페이지 컨텐츠가 헤더 뒤에 가리지 않게 */
+.page-wrap{ padding-top: calc(var(--header-h) + 30px); }
 /* 토큰(숫자만 조절해 픽셀 맞춤) */
 :root{
   --aboutv-hero-min: 54vh;
