@@ -77,7 +77,10 @@ body{
   border: 0;
   cursor: pointer;
   color: #111;                   /* 기본: 어두운 배경 위에 검정 */
+  pointer-events: auto;             /* ⬅ 반드시 클릭 가능 */
+  -webkit-tap-highlight-color: transparent; /* 모바일 탭 하이라이트 제거(선택) */
 }
+
 /* 메뉴가 열리면 X가 흰색으로 보여야 함 */
 body.nav-open .nav-toggle{ color:#fff; }
 
@@ -309,7 +312,7 @@ body.page-white{background:#fff;color:#0d0e12}
 .center-intro p{font-size:clamp(16px,2.6vw,22px);margin:0 auto;line-height:10;max-width:900px;}
 
 /* ③ 회사소개서 다운로드 CTA */
-.download-cta{background:var(--brand);color:#fff;padding:clamp(40px,6vw,96px) 16px}
+.download-cta{background:var(--brand);color:#fff;padding:clamp(240px,6vw,196px) 16px}
 .download-cta .cta-inner{text-align:center;width:min(960px,92%);margin:0 auto}
 .download-cta h3{font-size:clamp(28px,5vw,56px);margin:0 0 8px}
 .download-cta .filetype{opacity:.6;margin:0 0 24px;letter-spacing:.12em}

@@ -183,8 +183,28 @@ eyeLoop();
 
   // 파셜 주입 후/ DOM 준비 후 초기화
   document.addEventListener('partials:loaded', initNav);
-  document.addEventListener('DOMContentLoaded', initNav);
-})();
+document.addEventListener('DOMContentLoaded', () => {
+  const btn = document.getElementById('hamburger');
+  const overlay = document.getElementById('nav-overlay');
+
+  if (!btn || !overlay) return;
+
+  const open = () => {
+    document.body.classList.add('nav-open');
+    overlay.classList.add('is-open');
+    btn.setAttribute('aria-expanded', 'true');
+  };
+  const close = () => {
+    document.body.classList.remove('nav-open');
+    overlay.classList.remove('is-open');
+    btn.setAttribute('aria-expanded', 'false');
+  };
+  const toggle = () => (overlay.classList.contains('is-open') ? close() : open());
+
+  btn.addEventListener('click', toggle);
+  document.addEventListener('keydown', (e) => (e.key === 'Escape') && close());
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
+});})();
 
 
 // --- 메뉴 링크 공통 처리: #about/#services 포함 링크 전부 처리 ---
