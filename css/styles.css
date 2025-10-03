@@ -117,18 +117,38 @@ body.nav-open .icon-burger line:nth-child(3){transform:translateY(-7px) rotate(-
    ========================= */
 .nav-overlay{
   position:fixed; inset:0;
-  z-index: 1400; /* ⬅ 메뉴창이 헤더(로고+메뉴바)를 덮음 */
-  background: rgba(0,0,0,.9);
+  z-index:1400;                      /* 헤더(로고) 위 */
+  background:rgba(0,0,0,.9);
   color:#fff;
-  display:none;
-  grid-template-rows:1fr auto;
-  opacity:0; visibility:hidden;
-  transition:opacity .35s, visibility .35s;
+
+  /* 처음엔 화면 밖 + 투명 + 클릭 불가 */
+  transform: translateX(100%);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+
+  display: grid;                     /* 기존 display:none 제거 */
+  grid-template-rows: 1fr auto;
+
+  transition:
+    transform .42s cubic-bezier(.22,.8,.36,1),
+    opacity   .30s ease,
+    visibility 0s linear .42s;       /* 닫힐 때만 마지막에 숨김 */
+  will-change: transform;
 }
+
+/* 열릴 때: 화면 안으로 슬라이드, 보이게/클릭 가능 */
 .nav-overlay.is-open{
-  display:grid !important;
-  opacity:1; visibility:visible;
+  transform: translateX(0);
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition:
+    transform .42s cubic-bezier(.22,.8,.36,1),
+    opacity   .30s ease,
+    visibility 0s;                   /* 열릴 때 즉시 보이도록 */
 }
+
 .overlay-inner{display:contents}
 .overlay-nav{display:flex;align-items:center;justify-content:center}
 .mega-row{display:flex;gap:clamp(24px,5vw,64px);list-style:none;margin:0;padding:0}
